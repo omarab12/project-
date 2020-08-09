@@ -1,0 +1,50 @@
+<html>
+<?php
+
+
+// fill in your databasa data here!
+$server = "localhost";
+$username = "root";
+$password = "";
+$database = "laravel";
+$ref='';
+
+$connId = mysqli_connect($server,$username,$password) or die("Cannot connect to server");
+$selectDb = mysqli_select_db($connId,$database) or die("Cannot connect to database");
+
+
+
+$tracking_page_name="example";
+$ref=$_SERVER['HTTP_REFERER'];
+$agent=$_SERVER['HTTP_USER_AGENT'];
+$line = date('Y-m-d H:i:s');
+$ip_from_here = json_decode(file_get_contents('http://ipinfo.io'));
+
+
+
+$ip=$ip_from_here->ip;
+$host_name = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+$strSQL = "INSERT INTO track(id,tm, ref, agent, ip,ip_value,domain,tracking_page_name)    VALUES(DEFAULT,'$line','$ref','$agent','$ip',DEFAULT,'$host_name','$tracking_page_name')";
+$test=mysqli_query($connId,$strSQL);
+
+
+
+
+if ($connId->query($strSQL) === TRUE) {
+    echo "Tracking successfully done";
+  } else {
+    echo "Error: " . $strSQL . "<br>" . $connId->error;
+  }
+
+
+  
+ 
+
+
+?>
+
+
+
+
+</html>
+
